@@ -48,9 +48,11 @@ def after_login(resp):
     user = User.query.filter_by(email=resp.email).first()
     if user is None:
         nickname = resp.nickname
-    user = User(nickname=nickname,email=resp.email)
-    db.session.add(user)
-    db.session.commit()
+        if nickname is None or nickname == "":
+            nickname = resp.email.split('@')[0]
+        user = User(nickname=nickname,email=resp.email)
+        db.session.add(user)
+        db.session.commit()
     remember_me = False
     if 'remember_me' in session:
         remember_me = session['remember_me']
