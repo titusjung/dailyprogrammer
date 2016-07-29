@@ -1,13 +1,13 @@
 import urllib
 import urllib.request
 import json
-from pandas import Series, DataFrame
-import pandas as pd
-import numpy as np
+#from pandas import Series, DataFrame
+#import pandas as pd
+#import numpy as np
 import time
 #based on code from http://t-redactyl.io/blog/2015/11/analysing-reddit-data-part-2-extracting-the-data.html
 hdr = {'User-Agent': 'osx:r/relationships.single.result:v1.0 (by /u/<uninformednobody>)'}
-url =  'https://www.reddit.com/r/relationships/top/.json?sort=top&t=all&limit=1'
+url =  'https://www.reddit.com/r/askhistorians/new/.json?sort=top&t=all&limit=100'
 req = urllib.request.Request(url,headers=hdr)
 response = urllib.request.urlopen(req)
 text_data = response.read().decode('utf-8')
@@ -22,7 +22,8 @@ data_all = data['data']['children']
 while (len(data_all) <= 800):
     time.sleep(0.1)
     last = data_all[-1]['data']['name']
-    url = 'https://www.reddit.com/r/relationships/top/.json?sort=top&t=all&limit=100&after={!s}'.format(last)
+    #url = 'https://www.reddit.com/r/relationships/top/.json?sort=top&t=all&limit=100&after={!s}'.format(last)
+    url = 'https://www.reddit.com/r/askhistorians/new/.json?sort=top&t=all&limit=100&after={!s}'.format(last)
     if len(data_all)<10: 
         print(url)
     req =  urllib.request.Request(url, headers=hdr)
@@ -30,7 +31,7 @@ while (len(data_all) <= 800):
     data = json.loads(text_data)
     data_all += data['data']['children']
 
-f = open('workfile','w')
+f = open('workfile3.json','w')
 #f.write(data_all)
 json.dump(data_all,f)
 f.close()
