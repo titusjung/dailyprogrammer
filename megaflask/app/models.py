@@ -1,7 +1,7 @@
 from app import db
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, UserMixin
-
+from hashlib import md5
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +24,8 @@ class User(db.Model):
             return unicode(self.id)
         except NameError:
             return str(self.id)
+    def avatar(self, size):
+        return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
     
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
